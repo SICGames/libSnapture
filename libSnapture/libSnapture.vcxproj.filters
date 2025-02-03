@@ -1,0 +1,144 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\API">
+      <UniqueIdentifier>{bc58aab8-0652-41b8-9291-267642425647}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Capturer">
+      <UniqueIdentifier>{040024ce-ae6f-446e-be14-b2df6e9739de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Capturer\GDI">
+      <UniqueIdentifier>{807a4434-e5b7-4caf-976c-13abb2f0e76a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Capturer\DesktopDuplication">
+      <UniqueIdentifier>{f3f5b316-2869-45a7-ad5e-626ac6b219e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Captureer">
+      <UniqueIdentifier>{e6ea63e5-7210-4731-bc50-612bf1cc8dba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Captureer\GDI">
+      <UniqueIdentifier>{aff65294-69bb-448e-bfd2-c7c28de4d36d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\MonitorInfo">
+      <UniqueIdentifier>{24bb815a-ee89-4e15-91ff-317445e26a5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\MonitorInfo">
+      <UniqueIdentifier>{4f084048-7dbc-40ab-b0da-c2106b05d2d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ImageData">
+      <UniqueIdentifier>{27070ca3-d548-4fe7-a407-f1f5a265d65b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ImageData">
+      <UniqueIdentifier>{4bcde5f0-b361-4a4b-90b7-89c6cf0baff7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ErrorHelper">
+      <UniqueIdentifier>{5303d122-d750-46e2-9fe1-5dcd8c8ccbbb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\GDIHelper">
+      <UniqueIdentifier>{9d7cc7f7-1241-46d2-b1be-7afc16485044}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Helpers">
+      <UniqueIdentifier>{1ad72cbe-a468-4e64-b4f8-534d0faaf6f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ImageData\Extensions">
+      <UniqueIdentifier>{316bdff8-3215-4f89-941e-9b709fb0cdfa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Captureer\DesktopDuplication">
+      <UniqueIdentifier>{d72da19b-aeab-47df-9336-c099bc2fdc30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Helpers">
+      <UniqueIdentifier>{d44d909f-7944-4b0d-9755-c6e2744b2191}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="framework.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\API.h">
+      <Filter>Header Files\API</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\GDI\GDIScreenCapture.h">
+      <Filter>Header Files\Capturer\GDI</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\GDI\GDICore.h">
+      <Filter>Header Files\Capturer\GDI</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\MonitorInfo\Monitor.h">
+      <Filter>Header Files\MonitorInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\MonitorInfo\DisplayMonitor.h">
+      <Filter>Header Files\MonitorInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\MonitorInfo\DPI.h">
+      <Filter>Header Files\MonitorInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\MonitorInfo\MonitorCollection.h">
+      <Filter>Header Files\MonitorInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\MonitorInfo\DisplayMonitorImpl.h">
+      <Filter>Header Files\MonitorInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\MonitorInfo\Region.h">
+      <Filter>Header Files\MonitorInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\ImageData\ImageData.h">
+      <Filter>Header Files\ImageData</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\Helpers\ErrorHandler.h">
+      <Filter>Header Files\ErrorHelper</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\Helpers\GDIHelper.h">
+      <Filter>Header Files\GDIHelper</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\DesktopDuplication\DesktopDuplicationCapture.h">
+      <Filter>Header Files\Capturer\DesktopDuplication</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\DesktopDuplication\DirectXHeaders.h">
+      <Filter>Header Files\Capturer\DesktopDuplication</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\Helpers\DirectXErrorHandler.h">
+      <Filter>Header Files\ErrorHelper</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\Helpers\DirectXMacros.h">
+      <Filter>Header Files\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\SnaptureCommon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="dllmain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Capturer\GDI\GDIScreenCapture.cpp">
+      <Filter>Source Files\Captureer\GDI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MonitorInfo\DisplayMonitor.cpp">
+      <Filter>Source Files\MonitorInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MonitorInfo\DisplayMonitorImpl.cpp">
+      <Filter>Source Files\MonitorInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ImageData\ImageData.cpp">
+      <Filter>Source Files\ImageData</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Helpers\GDIHelper.cpp">
+      <Filter>Source Files\Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Capturer\DesktopDuplication\DesktopDuplicationCapture.cpp">
+      <Filter>Source Files\Captureer\DesktopDuplication</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
