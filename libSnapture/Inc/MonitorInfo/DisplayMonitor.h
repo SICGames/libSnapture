@@ -63,7 +63,7 @@ private:
 	static BOOL CALLBACK EnumMonitorsCallback(HMONITOR hMon, HDC hdc, LPRECT lprcMonitor, LPARAM pData)
 	{
 		std::vector<Monitor>* pThis = reinterpret_cast<std::vector<Monitor>*>(pData);
-		MONITORINFOEX monitorInfo = { 0 };
+		MONITORINFOEX monitorInfo;
 		monitorInfo.cbSize = sizeof(MONITORINFOEX);
 		GetMonitorInfo(hMon, &monitorInfo);
 
@@ -89,7 +89,7 @@ private:
 		lstrcpyW(monitor.DeviceName, dd.DeviceString);
 		
 		//monitor.MonitorName = std::wstring(getMonitorName(hMon));
-		
+		//--
 		LPWSTR mName = getMonitorName(hMon);
 		int mNameLen = lstrlenW(mName);
 		monitor.MonitorName = new WCHAR[mNameLen];

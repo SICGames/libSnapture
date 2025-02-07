@@ -4,7 +4,6 @@ int DisplayMonitor::mIndex = 0;
 
 DisplayMonitor::DisplayMonitor() 
 {
-    mIndex = 0;
 }
 DisplayMonitor::~DisplayMonitor() {
 

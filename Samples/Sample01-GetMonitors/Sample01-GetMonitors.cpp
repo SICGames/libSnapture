@@ -1,9 +1,11 @@
 #include <iostream>
-#include "../../libSnapture/Inc/MonitorInfo/DisplayMonitor.h"
-#include "../../libSnapture/Inc/MonitorInfo/MonitorCollection.h"
-#pragma comment(lib, "../../x64/Debug/libSnapture.lib")
+#include "../../libSnapture/Inc/SnaptureCommon.h"
 
-#define SNAPTUREAPI_IMPORT
+#ifdef _DEBUG
+#pragma comment(lib, "../../x64/Debug/libSnapture.lib")
+#else 
+#pragma comment(lib, "../../x64/Release/libSnapture.lib")
+#endif
 
 const char* ToMultibyteString(const wchar_t* str) 
 {
@@ -16,12 +18,12 @@ const char* ToMultibyteString(const wchar_t* str)
 int main()
 {
     DisplayMonitor* displayMonitor = new DisplayMonitor();
-    MonitorCollection* collections = new MonitorCollection();
-    collections = displayMonitor->GetMonitors();
-    unsigned int sz = collections->Count();
+    
+    auto collections = displayMonitor->GetMonitors();
+    unsigned int sz = collections.size();
 
     for (auto i = 0; i < sz; i++) {
-        Monitor monitor = collections->Get(i);
+        Monitor monitor = collections.at(i);
 
         const char* name = ToMultibyteString(monitor.Name);
         const char* devicename = ToMultibyteString(monitor.DeviceName);
@@ -35,7 +37,5 @@ int main()
         std::cout << "Is Primary: " << isPrimary << std::endl;
 
     }
-    collections->Clear();
-    delete collections;
-
+    collections.clear();
 }
