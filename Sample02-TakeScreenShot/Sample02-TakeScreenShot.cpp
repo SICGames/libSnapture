@@ -4,6 +4,7 @@
 #include "framework.h"
 #include <iostream>
 #include <fstream>
+
 #include "Sample02-TakeScreenShot.h"
 #include "../libSnapture/Inc/SnaptureCommon.h"
 
@@ -26,6 +27,74 @@ BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 
+std::vector<Monitor> monitors;
+HBITMAP bitmap;
+ULONG_PTR gdiplusToken;
+
+bool captureDesktopViaMonitorsInterlopWay(int monitorIndex) 
+{
+    DisplayMonitor* display_monitor = reinterpret_cast<DisplayMonitor*>(CreateDisplayMonitorClass());
+    Monitor* _monitors = NULL;
+    size_t numMonitors = 0;
+    DisplayMonitorGetMonitors(display_monitor, &_monitors, &numMonitors);
+    bitmap = CaptureDesktopScreen(&_monitors[monitorIndex]);
+
+    FreeMemoryResource(_monitors);
+    //delete _monitors;
+    numMonitors = 0;
+    delete display_monitor;
+    display_monitor = nullptr;
+    return true;
+}
+bool CaptureDesktop(int);
+bool RenderBitmap(HWND, HBITMAP);
+void ReleaseSnapster();
+
+
+bool CaptureDesktop(int monitorIndex) 
+{
+    DisplayMonitor* displaymonitor = new DisplayMonitor();
+
+    //-- GetMonitors seems to cause heap corruption in Release builds.
+    //-- Debug build is fine.
+    monitors = displaymonitor->GetMonitors();
+    Monitor* currentMonitor = &monitors.at(monitorIndex);
+    bitmap = CaptureDesktopScreen(currentMonitor);
+    delete displaymonitor;
+    displaymonitor = nullptr;
+    return true;
+}
+
+bool RenderBitmap(HWND hwnd, HBITMAP bitmap) 
+{
+    Gdiplus::GdiplusStartupInput gdiplusStartupInput;
+    Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
+    Gdiplus::Bitmap* bmp = Gdiplus::Bitmap::FromHBITMAP(bitmap, NULL);
+    if (bmp) {
+        HDC hDC = GetDC(hwnd);
+        if (hDC)
+        {
+            Gdiplus::Graphics g(hDC);
+            if (bmp->GetLastStatus() != S_OK)
+            {
+                OutputDebugString(L"Issue with loading bitmap.\n");
+                Gdiplus::GdiplusShutdown(gdiplusToken);
+                return false;
+            }
+            g.DrawImage(bmp, Gdiplus::Rect(0, 0, bmp->GetWidth(), bmp->GetHeight()));
+        }
+        Gdiplus::GdiplusShutdown(gdiplusToken);
+    }
+    bmp = nullptr;
+    return true;
+}
+void ReleaseSnapster() 
+{
+    ReleaseCapturedBitmap(bitmap);
+    if (monitors.size() > 0) {
+        monitors.clear();
+    }
+}
 using namespace Gdiplus;
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
@@ -51,28 +120,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_SAMPLE02TAKESCREENSHOT));
     MSG msg;
-    
-    
-    DisplayMonitor* displaymonitor = new DisplayMonitor();
-       
-    //-- GetMonitors seems to cause heap corruption in Release builds.
-    //-- Debug build is fine.
-    std::vector<Monitor> monitors = displaymonitor->GetMonitors();
-
-    /*
-    Monitor* currentMonitor = &monitors.at(0);
-
-    HBITMAP bitmap = CaptureDesktopScreen(currentMonitor);
-    ReleaseCapturedBitmap(bitmap);
-    
-    */
-    if (monitors.size() > 0) {
-        monitors.clear();
-    }
-    delete displaymonitor;
-    displaymonitor = nullptr;
-    
     // Main message loop:
+    
     while (GetMessage(&msg, nullptr, 0, 0))
     {
         if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
@@ -82,6 +131,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         }
     }
 
+    ReleaseSnapster();
     return (int)msg.wParam;
 }
 
@@ -98,7 +148,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 
     wcex.cbSize = sizeof(WNDCLASSEX);
 
-    wcex.style          = CS_HREDRAW | CS_VREDRAW;
+    wcex.style          = 0;
     wcex.lpfnWndProc    = WndProc;
     wcex.cbClsExtra     = 0;
     wcex.cbWndExtra     = 0;
@@ -134,8 +184,10 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    {
       return FALSE;
    }
-
+   captureDesktopViaMonitorsInterlopWay(1);
+   //CaptureDesktop(1);
    ShowWindow(hWnd, nCmdShow);
+//   RenderBitmap(hWnd, bitmap);
    UpdateWindow(hWnd);
    return TRUE;
    //-- after exiting function, run-time stack check failure #2 - around variable c is corrupted.
@@ -176,7 +228,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         {
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
-            // TODO: Add any drawing code that uses hdc here...
+            if (bitmap) 
+            {
+                RenderBitmap(hWnd, bitmap);
+            }
             EndPaint(hWnd, &ps);
         }
         break;

@@ -19,23 +19,33 @@ int main()
 {
     DisplayMonitor* displayMonitor = new DisplayMonitor();
     
-    auto collections = displayMonitor->GetMonitors();
-    unsigned int sz = collections.size();
+    try {
+        auto collections = displayMonitor->GetMonitors();
+        unsigned int sz = collections.size();
 
-    for (auto i = 0; i < sz; i++) {
-        Monitor monitor = collections.at(i);
+        for (auto i = 0; i < sz; i++) {
+            Monitor monitor = collections.at(i);
 
-        const char* name = ToMultibyteString(monitor.Name);
-        const char* devicename = ToMultibyteString(monitor.DeviceName);
-        const char* monitorName = ToMultibyteString(monitor.MonitorName);
+            const char* name = ToMultibyteString(monitor.Name);
+            const char* devicename = ToMultibyteString(monitor.DeviceName);
+            const char* monitorName = ToMultibyteString(monitor.MonitorName);
 
-        std::cout << "Name: " << name << std::endl;
-        std::cout << "Display Name: " << devicename << std::endl;
-        std::cout << "Monitor Name: " << monitorName << std::endl;
-        const char* isPrimary = monitor.isPrimary == true ? "Yes" : "No";
+            std::cout << "Name: " << name << std::endl;
+            std::cout << "Display Name: " << devicename << std::endl;
+            std::cout << "Monitor Name: " << monitorName << std::endl;
+            const char* isPrimary = monitor.isPrimary == true ? "Yes" : "No";
 
-        std::cout << "Is Primary: " << isPrimary << std::endl;
+            std::cout << "Is Primary: " << isPrimary << std::endl;
 
+        }
+
+        collections.clear();
     }
-    collections.clear();
+    catch (std::exception ex) {
+        std::cout << "There was an issue with obtaining monitors. Reason: " << ex.what() << std::endl;
+    }
+
+    std::cout << "Press any key to exit..." << std::endl;
+    std::cin.get();
+    return 0;
 }

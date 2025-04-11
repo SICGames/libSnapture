@@ -1,6 +1,7 @@
 #pragma once
 #include "../../Inc/API.h"
 #include "DisplayMonitor.h"
+#include <Windows.h>
 
 SNAPTUREAPI void* CreateDisplayMonitorClass();
 SNAPTUREAPI void DestroyDisplayMonitorClass(void*);

@@ -18,15 +18,16 @@ void DisplayMonitorGetMonitors(void* displaymonitor, Monitor** monitorArray, siz
 
 		*numMonitors = monitors.size();
 		size_t sz = *numMonitors * sizeof(Monitor);
-		*monitorArray = reinterpret_cast<Monitor*>(malloc(sz));
+		*monitorArray = new Monitor[monitors.size()];
+		//*monitorArray = reinterpret_cast<Monitor*>(malloc(sz));
 		
-		if (*numMonitors > 0) {
-			for (auto x = 0; x < *numMonitors; x++)
+		if (*numMonitors > 0) 
+		{
+			for (int x = 0; x < monitors.size(); x++)
 			{
 				if (*monitorArray)
 				{
-					Monitor& monitor = monitors.at(x);
-
+					const Monitor monitor = monitors.at(x);
 					(*monitorArray)[x].ID = monitor.ID;
 					(*monitorArray)[x].Name = monitor.Name;
 					(*monitorArray)[x].DeviceName = monitor.DeviceName;
@@ -40,12 +41,16 @@ void DisplayMonitorGetMonitors(void* displaymonitor, Monitor** monitorArray, siz
 				}
 			}
 		}
+
+		monitors.clear();
 	}
 }
 void FreeMemoryResource(void* ptr) 
 {
-	if (ptr != nullptr) {
-		free(ptr);
-		ptr = nullptr;
+	if (ptr != nullptr) 
+	{
+		delete[] ptr;
+		//free(ptr);
+		//ptr = nullptr;
 	}
 }

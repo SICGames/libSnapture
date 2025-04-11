@@ -7,6 +7,7 @@
 #include <stdexcept>
 #include <vector>
 
-SNAPTUREAPI HBITMAP CaptureDesktopScreen(Monitor*);
-SNAPTUREAPI HBITMAP CaptureRegion(Monitor*, int, int, int, int);
+SNAPTUREAPI HBITMAP CaptureDesktopScreen(int, int, int, int);
+SNAPTUREAPI HBITMAP CaptureRegion(int, int, int, int, int, int, int, int);
 SNAPTUREAPI void ReleaseCapturedBitmap(HBITMAP);
+SNAPTUREAPI RECT GetVirtualScreenSize();
