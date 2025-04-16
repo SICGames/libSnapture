@@ -5,7 +5,7 @@
 /// </summary>
 /// <param name="bitmap"></param>
 /// <returns></returns>
-void CreateImageDataFromHBITMAP(_Out_ LPImageData imagedata, const HBITMAP bitmap) 
+void CreateImageDataFromHBITMAP(_Out_ LPImageData imagedata, const HBITMAP bitmap, const double DPI = 300) 
 {
 	if (bitmap == NULL) {
 		throw new std::exception("Bitmap is null");
@@ -16,6 +16,7 @@ void CreateImageDataFromHBITMAP(_Out_ LPImageData imagedata, const HBITMAP bitma
 
 	if (imagedata != nullptr) 
 	{
+		const int pixelsPerMeter = static_cast<int>(DPI * 39.3701);
 		BITMAP bmp;
 		GetObject(bitmap, sizeof(BITMAP), &bmp);
 
@@ -48,12 +49,17 @@ void CreateImageDataFromHBITMAP(_Out_ LPImageData imagedata, const HBITMAP bitma
 		bmpInfo.bmiHeader.biHeight = -abs(height); //-- turn to negative number
 		bmpInfo.bmiHeader.biBitCount = BitsPerPixel;
 		bmpInfo.bmiHeader.biPlanes = 1;
+		bmpInfo.bmiHeader.biXPelsPerMeter = pixelsPerMeter;
+		bmpInfo.bmiHeader.biYPelsPerMeter = pixelsPerMeter;
+
 		
 		if (0 == GetDIBits(GetDC(0), bitmap, 0, 0, nullptr, &bmpInfo, DIB_RGB_COLORS)) {
 			throw new std::runtime_error("Unable to obtain bitmap size from screen shot.");
 		}
 
 		imagedata->Size = size;
+		imagedata->DPI = DPI;
+
 		//Size = bmpInfo.bmiHeader.biSizeImage;
 		imagedata->Data = (unsigned char*)malloc(size);
 
@@ -62,8 +68,6 @@ void CreateImageDataFromHBITMAP(_Out_ LPImageData imagedata, const HBITMAP bitma
 		{
 			throw new std::runtime_error("Unable to obtain bitmap pixels from screen shot.");
 		}
-
-
 	}
 }
 
@@ -76,7 +80,7 @@ void CreateImageDataFromHBITMAP(_Out_ LPImageData imagedata, const HBITMAP bitma
 /// <param name="width"></param>
 /// <param name="height"></param>
 /// <param name="channels"></param>
-void CreateImageData(_Out_ LPImageData data, const int width, const int height, const int channels, const void* pixels)
+void CreateImageData(_Out_ LPImageData data, const int width, const int height, const int channels, const void* pixels, const double DPI = 300)
 {
 	if (data == nullptr)
 		data = reinterpret_cast<ImageData*>(malloc(sizeof(ImageData)));
@@ -85,6 +89,7 @@ void CreateImageData(_Out_ LPImageData data, const int width, const int height, 
 		data->Width = width;
 		data->Height = height;
 		data->Channels = channels;
+		data->DPI = DPI;
 		int bitcount = data->Channels * 8;
 		int padding = 0;
 		int stride = width * channels;
@@ -148,10 +153,10 @@ void CreateImageData(_Out_ LPImageData data, const int width, const int height, 
 bool SaveImageDataToFile(LPImageData data, const WCHAR* filename)
 {
 	bool flipVertically = true;
-
+	
 	GDIHelper* gdihelper = new GDIHelper();
 	gdihelper->GDIPlus_Startup();
-
+	
 	std::wstring filenameStr(filename);
 	auto ext = filenameStr.substr(filenameStr.length() - 3);
 	HRESULT hr = S_OK;
@@ -178,6 +183,7 @@ bool SaveImageDataToFile(LPImageData data, const WCHAR* filename)
 		hr = CLSIDFromString(L"{557cf406-1a04-11d3-9a73-0000f81ef32e}", &clsid);
 	}
 
+	const int pixelsPerMeter = static_cast<int>(data->DPI * 39.3701);
 	//-- Recreate bitmap from scratch
 	BITMAPINFOHEADER bitmapinfoheader;
 	ZeroMemory(&bitmapinfoheader, sizeof(BITMAPINFOHEADER));
@@ -190,6 +196,8 @@ bool SaveImageDataToFile(LPImageData data, const WCHAR* filename)
 	bitmapinfoheader.biClrImportant = 0;
 	bitmapinfoheader.biClrUsed = 0;
 	bitmapinfoheader.biSizeImage = data->Stride * data->Height;
+	bitmapinfoheader.biXPelsPerMeter = pixelsPerMeter;
+	bitmapinfoheader.biYPelsPerMeter = pixelsPerMeter;
 
 	BITMAPINFO bitmapinfo;
 	ZeroMemory(&bitmapinfo, sizeof(BITMAPINFO));
@@ -200,7 +208,9 @@ bool SaveImageDataToFile(LPImageData data, const WCHAR* filename)
 	bitmapinfo.bmiHeader.biCompression = BI_RGB;
 	bitmapinfo.bmiHeader.biPlanes = 1;
 	bitmapinfo.bmiHeader.biSizeImage = data->Stride * data->Height;
-	
+	bitmapinfo.bmiHeader.biXPelsPerMeter = pixelsPerMeter;
+	bitmapinfo.bmiHeader.biYPelsPerMeter = pixelsPerMeter;
+
     HBITMAP hBitmap = CreateDIBitmap(GetDC(NULL), &bitmapinfoheader, CBM_INIT, (const void*)data->Data, &bitmapinfo, DIB_RGB_COLORS);
 
 	if (hBitmap == nullptr) {
